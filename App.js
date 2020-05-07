@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { Button } from 'react-native-elements';
 
 export default function App() {
@@ -7,38 +7,32 @@ export default function App() {
   let [history, setHistory] = useState(['white']);
   let [pos, setPos] = useState(0);
 
+  function handlePress(pos, history, color) {
+    if(pos<history.length-1) history.splice(pos+1);
+    history.push(color);
+    setHistory(history);
+    setPos(pos+=1)
+    setColor(color);
+  }
+
   return (
     <View style={styles.container}>
+      <View style={styles.containerSquare}>
+        <View style={[styles.square, {backgroundColor: color}]}>
+        </View>
+      </View>
       <View style={styles.containerButton}>
         <Button
           buttonStyle={[styles.buttonColor, {backgroundColor: 'red'}]}
-          onPress={() => {
-            if(pos<history.length-1) history.splice(pos+1);
-            history.push('red');
-            setHistory(history);
-            setPos(pos+=1)
-            setColor('red');
-          }}
+          onPress={() => handlePress(pos, history, 'red')}
         />
         <Button
           buttonStyle={[styles.buttonColor, {backgroundColor: 'green'}]}
-          onPress={() => {
-            if(pos<history.length-1) history.splice(pos+1);
-            history.push('green');
-            setHistory(history);
-            setPos(pos+=1);
-            setColor('green');
-          }}
+          onPress={() => handlePress(pos, history, 'green')}
         />
         <Button
           buttonStyle={[styles.buttonColor, {backgroundColor: 'blue'}]}
-          onPress={() => {
-            if(pos<history.length-1) history.splice(pos+1);
-            history.push('blue')
-            setHistory(history);
-            setPos(pos+=1)
-            setColor('blue');
-          }}
+          onPress={() => handlePress(pos, history, 'blue')}
         />
         <Button
           buttonStyle={[styles.buttonColor, styles.buttonAction]}
@@ -61,11 +55,6 @@ export default function App() {
           }}
         />
       </View>
-      <View style={styles.containerSquare}>
-        <View style={[styles.square, {backgroundColor: color}]}>
-        </View>
-      </View>
-
     </View>
   );
 }
@@ -75,6 +64,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   containerButton: {
+    position: 'absolute',
     flexDirection: 'row',
     backgroundColor: '#fff',
     marginTop: 40,
@@ -100,7 +90,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-    flexDirection: 'column',
   },
   square: {
     width: 120,
